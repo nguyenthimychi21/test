@@ -29,11 +29,9 @@ public class AccountController {
     public ResponseEntity<String> createTransaction(
             @RequestBody CreateAccountRequest accountRequest
 
-    ) throws Exception {
-        Optional<User> user = userService.getUser(accountRequest.getUserId());
-        if (user == null) {
-            throw new Exception("Error 404 :Not Found");
-        }
+    ) {
+        User user = userService.getUser(accountRequest.getUserId());
+
         {
             Account account = new Account();
             account.setUserId(accountRequest.getUserId());

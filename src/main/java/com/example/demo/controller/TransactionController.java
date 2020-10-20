@@ -33,9 +33,9 @@ public class TransactionController {
             @PathVariable Long id,
             @RequestBody CreateTransactions transactionsRequest
     ) throws Exception {
-        Optional<User> user = userService.getUser(id);
+        User user = userService.getUser(id);
         Account account = accountService.getId(transactionsRequest.getAccountId());
-        if (account == null && user == null) {
+        if (account == null ) {
             throw new Exception("Error 404 :Not Found");
         }
         {
@@ -59,7 +59,7 @@ public class TransactionController {
             @PathVariable Long id,
             @RequestParam(value = "account_id") Long accountId
     ) throws Exception {
-        Optional<User> user = userService.getUser(id);
+        User user = userService.getUser(id);
         if (user == null) {
             throw new Exception("error");
         }
