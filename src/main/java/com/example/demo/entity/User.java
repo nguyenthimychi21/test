@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-            @Column(name = "id")
+    @Column(name = "id")
     private Long id;
     @Column(name = "name")
     private String name;

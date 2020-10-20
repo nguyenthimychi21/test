@@ -9,11 +9,13 @@ import com.example.demo.service.AccountService;
 import com.example.demo.service.TransactionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Parameter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/transactions")
@@ -26,14 +28,17 @@ public class TransactionController {
     UserService userService;
 
     //create transactions
-    @PostMapping(path = "/{user}/{id}")
-    public void createTransaction(
+    @PostMapping(path = "/{id}")
+    public ResponseEntity<String> createTransaction(
             @PathVariable Long id,
             @RequestBody CreateTransactions transactionsRequest
-    ) {
-        User user = userService.getUser(id);
+    ) throws Exception {
+        Optional<User> user = userService.getUser(id);
         Account account = accountService.getId(transactionsRequest.getAccountId());
-        if (account != null && user != null) {
+        if (account == null && user == null) {
+            throw new Exception("Error 404 :Not Found");
+        }
+        {
 
             Transactions transaction = new Transactions();
             transaction.setAccountId(transactionsRequest.getAccountId());
@@ -43,27 +48,27 @@ public class TransactionController {
             transaction.setBank(account.getBank());
             transaction.setUserId(account.getUserId());
             transactionService.saveTransaction(transaction);
+            return new ResponseEntity<String>("Create Success", HttpStatus.CREATED);
         }
     }
 
 
     //get all transactions by userid and acountid
-    @GetMapping(path = "/{user}/{id}/{accountId}")
+    @GetMapping(path = "/{id}/{accountId}")
     public List<Transactions> getAllTransactionsByAccountId(
             @PathVariable Long id,
             @RequestParam(value = "account_id") Long accountId
-    ) {
-        User user = userService.getUser(id);
+    ) throws Exception {
+        Optional<User> user = userService.getUser(id);
         if (user == null) {
-            return null;
+            throw new Exception("error");
         }
         return transactionService.getAllAcountId(accountId);
     }
 
     //put transaction by id
-
     @PutMapping(path = "/{id}")
-    public void updateDomain(
+    public ResponseEntity<String> updateDomain(
             @PathVariable Long id,
             @RequestBody UpdateTransactionsRequest transactionsRequest
 
@@ -77,14 +82,16 @@ public class TransactionController {
         transactions.setTransactionType(transactionsRequest.getTransactionType());
         transactions.setCreateAt(new Date());
         transactionService.saveTransaction(transactions);
+        return new ResponseEntity<String>("Update Success", HttpStatus.CREATED);
     }
 
     //delete transaction by id
     @DeleteMapping(path = "/{id}")
-    public void deleteTransactions(
+    public ResponseEntity<String> deleteTransactions(
             @PathVariable Long id) {
         Transactions transactions = transactionService.getId(id);
         transactionService.deleteTransactions(transactions);
+        return new ResponseEntity<String>("Delete Success", HttpStatus.OK);
     }
 }
 

@@ -24,5 +24,5 @@ public class Account implements Serializable {
     private String name;
     @Column(name = "user_id")
     private Long userId;
-    private  String bank;
+    private String bank;
 }

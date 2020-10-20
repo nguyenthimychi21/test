@@ -30,8 +30,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void deleteTransactions(Transactions transactions) {
+    public Transactions deleteTransactions(Transactions transactions) {
         transactionRepository.delete(transactions);
+        return transactions;
     }
 
     @Override
