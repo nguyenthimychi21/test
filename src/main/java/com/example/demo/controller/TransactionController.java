@@ -35,7 +35,7 @@ public class TransactionController {
     ) throws Exception {
         User user = userService.getUser(id);
         Account account = accountService.getId(transactionsRequest.getAccountId());
-        if (account == null ) {
+        if (account == null) {
             throw new Exception("Error 404 :Not Found");
         }
         {

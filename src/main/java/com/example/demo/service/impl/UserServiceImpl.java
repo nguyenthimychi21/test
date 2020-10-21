@@ -14,6 +14,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+
     @Override
     public User saveUser(User user) {
         return userRepository.save(user);
@@ -22,9 +23,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(Long id) {
         //return userRepository.findById(id);
-        Optional<User> studentResponse =  userRepository.findById(id);
-        User student = studentResponse.get();
-        return student;
+        Optional<User> userResponse = userRepository.findById(id);
+        User user = userResponse.get();
+        return user;
     }
 
 
